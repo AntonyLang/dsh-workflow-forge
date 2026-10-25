@@ -162,6 +162,8 @@ buildHash = H(draftHash, scriptHash, compilerVersion, runtimeVersion, targetAdap
 - `buildHash` 不包含自身、时间戳和试跑摘要，避免自引用；`assets/build.json` 里也不写 `buildHash`，它由目录名和打包结果承载。
 - 只改提示词也会改变 `specHash → draftHash → buildHash`，旧试跑在打包时会被 `TRIAL_IDENTITY_MISMATCH` 拒绝。
 
+仓库里的 `packages/scenario-source-brief/` 是 `pnpm build:scenario` 产出的**当前版本**分发目录（含 `dist/index.js`），其不可变历史由 git 提交与 `assets/build.json` 里的 hash 共同承载；同一份包也发布为 npm `dsh-scenario-source-brief`。
+
 `run.json` 使用同目录临时文件 + 原子 rename；一个运行只有一个 writer，更新按队列顺序落盘，终态提交前等待队列排空。目录名只允许 `[A-Za-z0-9._-]`，解析后的路径必须仍在 `dataDir` 内，否则 `PATH_ESCAPE`。
 
 ## 7. 报告与模板
@@ -192,7 +194,7 @@ buildHash = H(draftHash, scriptHash, compilerVersion, runtimeVersion, targetAdap
 | M1 手写场景 | source-brief、材料快照、证据检查、JSON 与 Markdown | 完成 |
 | M2 定义与编译 | 受限 Spec、schema 映射、静态分析、固定 JS | 完成（28 个编译器用例） |
 | M3 作者链路 | Skill + 四个 forge 工具 | 完成 |
-| M4 场景交付 | 原生 bundle、版本 hash、独立 runtime、兼容表 | 构建与独立运行完成；安装与真实模型试跑待做 |
+| M4 场景交付 | 原生 bundle、版本 hash、独立 runtime、兼容表 | 构建、独立运行、npm 发布与发布产物验证完成；真实宿主安装与真实模型试跑待做 |
 | M5 开源维护 | 固定 case、教程、失败复现、版本记录 | 5 份 fixtures、两个 demo、验证矩阵完成 |
 
 ## 10. 第三方与出处

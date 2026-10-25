@@ -1,8 +1,8 @@
 # Build summary
 
 - package: `dsh-scenario-source-brief@0.1.0`
-- buildHash: `sha256:8ab7c1661432700aec1b313c3afa5f7f552b26bfc7f2691bc4e9f3099b9873e0`
-- draftHash: `sha256:52f652d0c588f89d143f5d084abf13bdaf3fcf2e42d423905379747b2e75e8ce`
+- buildHash: `sha256:1f2e13472402f2bbc7e614e700136a9a3930bb52955ebe609f38dbeb4453620c`
+- draftHash: `sha256:ad858dc6b4da10e943d171ec714a060deb107967318241f37cc592f9de16f15a`
 - verification: `{"state":"packaged","runtimeVerified":false,"notes":["3 of 3 trial(s) ran against the offline mock engine; runtime_verified still requires a host trial"]}`
 - trials: 01-normal.json, 02-conflicting.json, 05-second-topic.json
 

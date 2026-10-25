@@ -198,6 +198,7 @@ TRIAL_NOT_FOUND  trialRunIds
 | --- | --- |
 | 静态检查 | meta-schema、未知字段、契约、预算、schema 子集、引用/类型/分支合法性 |
 | 包装层与编译 | 顺序与批次、null、位置对齐、取消、期限、卸载、错误分类、记录与报告、打包身份 |
+| 发布产物 | `pnpm verify:package`：空项目安装 tarball 或 npm 包，注册工具/Skill，跑完一次并校验报告与记录 |
 
 我特意写了一批「应该失败」的用例，因为一个检查器最值得信任的部分是它的拒绝路径：
 
@@ -219,10 +220,10 @@ TRIAL_NOT_FOUND  trialRunIds
 
 ## 六、交付物
 
-一次 `pnpm demo` 会产出：
+一次 `pnpm demo` 会产出（`pnpm build:scenario` 另会把它落到仓库里的 `packages/scenario-source-brief/`，并发布为 npm 包）：
 
 ```text
-examples/source-brief/packaged/<hash>/dsh-scenario-source-brief/
+packages/scenario-source-brief/
 ├── package.json            engines.dsh / peerDependencies / dsh.bundle.patch
 ├── cordis.patch.yml        insert 入口
 ├── dist/index.js           ESM bundle：薄 runtime + checks + 校验器
@@ -240,6 +241,8 @@ examples/source-brief/packaged/<hash>/dsh-scenario-source-brief/
 └── LICENSE
 ```
 
+发布形态有两个：npm 上的 `dsh-scenario-source-brief@0.1.0`，以及 GitHub Release `v0.1.0` 的预构建 tarball。两者字节一致，都由 `pnpm verify:package` 在空项目里装过一次并跑通。
+
 `dist/index.js` 里没有任何 `@deepseek-ai/*` 的 import：场景只通过 Cordis context 使用宿主能力，那些包只作为 peer 参与版本门禁。这样做的代价是——「类型能编译」不能证明「接口真的可用」，所以验证状态必须停在 `packaged`，直到在目标宿主上真的装一次、跑一次。
 
 ## 七、诚实的边界
@@ -251,6 +254,8 @@ examples/source-brief/packaged/<hash>/dsh-scenario-source-brief/
 - 没有证明 quote 与结论语义一致，只证明了可定位；
 - 没有覆盖卸载恰好在终态写入窗口发生的时序；
 - 没有模拟记录写入失败的只读目录场景。
+
+已经做掉的一层是「发布产物」：包被装进一个没有工作区、没有开发依赖的空项目，从 npm 注册表拉下来，注册工具和 Skill，用本地 mock 引擎跑完一次并写出报告。它证明的是**分发出去的那份字节能加载、能注册、能跑**，不是「真实宿主能跑」。
 
 前两条是环境问题：本机没有可用的目标宿主与模型凭据，而「用一个像宿主的 mock」替代，只会制造已经验证过的错觉。所以我把它们写进 README、写进 build manifest 的 `verification.state`、也写进运行记录的 `engineKind`。
 

@@ -22,7 +22,7 @@ AntonyLang__dsh-workflow-forge--packages-scenario-source-brief.yml
 | 描述属实、无夸大 | ✅ 只描述已完成的行为；`runtime_verified` 未声称 |
 | 官方 `@deepseek-ai/*` 用 peerDependencies | ✅ |
 | 预发布 peer 范围可匹配 | ✅ 精确钉到 `0.2.1-rc.3`（带预发布标签的比较符） |
-| 预构建分发 | ✅ GitHub Release 附件 tarball；npm 包名 `dsh-scenario-source-brief` |
+| 预构建分发 | ✅ GitHub Release 附件 tarball；npm 已发布 `dsh-scenario-source-brief@0.1.0` |
 
 ## 投稿步骤
 

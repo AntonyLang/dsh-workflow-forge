@@ -48,6 +48,8 @@ export type ScenarioPluginOptions = {
   dataDir?: string;
   deadlineMs?: number;
   toolName?: string;
+  /** `host` in production; `mock` for offline install/artifact verification. */
+  engineKind?: "host" | "mock";
 };
 
 export type ScenarioPlugin = {
@@ -85,7 +87,7 @@ export function createScenarioPlugin(options: ScenarioPluginOptions = {}): Scena
           dataDir,
           deadlineMs,
           hostVersion: readString(config?.["hostVersion"]) ?? "unknown",
-          engineKind: "host",
+          engineKind: options.engineKind ?? readEngineKind(config?.["engineKind"]) ?? "host",
           ...(ctx.logger ? { onProgress: (event) => ctx.logger?.info?.(`workflow ${event.type}`) } : {}),
         },
       });
@@ -208,6 +210,10 @@ function readString(value: JsonValue | undefined): string | undefined {
 
 function readNumber(value: JsonValue | undefined): number | undefined {
   return typeof value === "number" ? value : undefined;
+}
+
+function readEngineKind(value: JsonValue | undefined): "host" | "mock" | undefined {
+  return value === "mock" || value === "host" ? value : undefined;
 }
 
 export type { FileStore };

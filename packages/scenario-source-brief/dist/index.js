@@ -9572,7 +9572,7 @@ function createScenarioPlugin(options = {}) {
           dataDir,
           deadlineMs,
           hostVersion: readString(config?.["hostVersion"]) ?? "unknown",
-          engineKind: "host",
+          engineKind: options.engineKind ?? readEngineKind(config?.["engineKind"]) ?? "host",
           ...ctx.logger ? { onProgress: (event) => ctx.logger?.info?.(`workflow ${event.type}`) } : {}
         }
       });
@@ -9685,6 +9685,9 @@ function readString(value) {
 }
 function readNumber(value) {
   return typeof value === "number" ? value : void 0;
+}
+function readEngineKind(value) {
+  return value === "mock" || value === "host" ? value : void 0;
 }
 
 // packages/runtime/src/testing.ts

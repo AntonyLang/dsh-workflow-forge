@@ -79,23 +79,28 @@ pnpm demo            # 离线全链路：validate → trial×5 → package → �
 pnpm demo:failure    # 三个层次的失败与对应诊断
 pnpm build:scenario  # 生成可直接安装的包：packages/scenario-source-brief/
 pnpm pack:scenario   # 生成发布用的 tarball：release/dsh-scenario-source-brief-0.1.0.tgz
+pnpm verify:package  # 从 tarball 安装到干净项目并跑通；加 --from-registry 验证 npm 产物
 ```
 
 `pnpm demo` 不需要模型和 API Key：它用一个**离线 mock 引擎**执行真实编译产物，覆盖真实的分批、空结果、分支和报告渲染。这也是为什么它的运行记录会写 `engineKind: "mock"`，构建只会标成 `packaged`。
 
 ## 安装这个场景
 
-`pnpm build:scenario` 产出的 `packages/scenario-source-brief/` 是一个完整、可直接安装的 DSH 插件包（声明了 `dsh.bundle` 与 `cordis.patch.yml`，并内置 `dist/index.js`）：
+已发布到 npm：**`dsh-scenario-source-brief@0.1.0`**
+
+```bash
+dsh plugin add dsh-scenario-source-brief
+```
+
+也可以直接从仓库里的预构建包安装：
 
 ```bash
 dsh plugin add ./packages/scenario-source-brief
-# 或在发布到 npm 之后：
-# dsh plugin add dsh-scenario-source-brief
 ```
 
 安装后必须配置 `dataDir`（宿主允许的绝对目录）：运行输入、报告与记录都写在这里，模型不能选择写入路径。
 
-> npm 包名已预留为 `dsh-scenario-source-brief`。当前仓库状态见 `docs/awesome/README.md`：真实宿主安装（`installed`）与真实模型试跑（`runtime_verified`）尚未执行，因此构建仍停在 `packaged`。
+发布产物做过一次独立验证（`pnpm verify:package --from-registry`）：在干净项目里从 npm 安装、注册 `source_brief` 工具与 `source-brief` Skill、跑完一次 `COMPLETED` 并写出报告与运行记录。它用的仍是本地 mock 引擎，所以验证状态停在 `packaged`：真实宿主安装（`installed`）与真实模型试跑（`runtime_verified`）尚未执行。
 
 ## 三个层次的验证状态
 
@@ -139,6 +144,7 @@ docs/              架构、DSL、数据合同、验证矩阵、作品集博客�
 | 项 | 值 | 验证方式 |
 | --- | --- | --- |
 | Node.js | ≥ 22.11（开发机 v24.14.0） | CI 与本机测试 |
+| npm 包 | `dsh-scenario-source-brief@0.1.0` | `npm view` + 干净项目安装运行 |
 | 目标 DSH | `0.2.1-rc.3`（方案源码基线提交 `22ddee3`） | 仅声明在 `engines.dsh`，**未在真实宿主安装** |
 | Cordis | `4.0.5`（peer） | 同上 |
 | 原生能力 | workflowEngine.start / run.result / run.dispose / agent / parallel / spawn | 以结构化 adapter 类型声明，mock 引擎按同一合同实现 |

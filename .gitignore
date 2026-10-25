@@ -22,3 +22,7 @@ release/
 _extract.md
 *.tmp
 *.log
+
+# npm device-auth scratch
+.npm-auth-url.txt
+.npm-publish-attempt.log

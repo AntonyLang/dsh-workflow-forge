@@ -28,7 +28,8 @@
     "demo": "tsx scripts/demo.ts",
     "demo:failure": "tsx scripts/demo-failure.ts",
     "build:scenario": "tsx scripts/build-package.ts",
-    "pack:scenario": "npm pack ./packages/scenario-source-brief --pack-destination release"
+    "pack:scenario": "npm pack ./packages/scenario-source-brief --pack-destination release",
+    "verify:package": "tsx scripts/verify-package.ts"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

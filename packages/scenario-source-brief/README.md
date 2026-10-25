@@ -65,8 +65,8 @@ DSH 场景插件：source-brief@0.1.0
 
 - `specHash`: `sha256:09562031c1dfb55641919b66624f77a3d5b821ad6068898104a4b5bcd602555b`
 - `scriptHash`: `sha256:0227ab9faf3321495f852096907c43381ca36636beae1134032ffa5f32fc7b89`
-- `draftHash`: `sha256:52f652d0c588f89d143f5d084abf13bdaf3fcf2e42d423905379747b2e75e8ce`
-- `buildHash`: `sha256:8ab7c1661432700aec1b313c3afa5f7f552b26bfc7f2691bc4e9f3099b9873e0`
+- `draftHash`: `sha256:ad858dc6b4da10e943d171ec714a060deb107967318241f37cc592f9de16f15a`
+- `buildHash`: `sha256:1f2e13472402f2bbc7e614e700136a9a3930bb52955ebe609f38dbeb4453620c`
 
 安装不等于业务可用：安装证明 `exports`、依赖与 profile 配置正确，业务试跑才证明模型结构化输出与文件策略能一起工作。
 

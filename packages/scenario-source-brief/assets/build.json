@@ -4,11 +4,11 @@
   "workflowVersion": "0.1.0",
   "specVersion": "0.1",
   "specHash": "sha256:09562031c1dfb55641919b66624f77a3d5b821ad6068898104a4b5bcd602555b",
-  "draftHash": "sha256:52f652d0c588f89d143f5d084abf13bdaf3fcf2e42d423905379747b2e75e8ce",
+  "draftHash": "sha256:ad858dc6b4da10e943d171ec714a060deb107967318241f37cc592f9de16f15a",
   "scriptHash": "sha256:0227ab9faf3321495f852096907c43381ca36636beae1134032ffa5f32fc7b89",
   "assetsHash": "sha256:c3d1529ebd25eaf745eb6dcadf576eab0c98b4825e7f00f2e1cdf181b768e44c",
   "checksHash": "sha256:2b10bca11c8f8ecd37e8bb1f4e71dc7769c1c6a2d1dd4eb3e537dcfd4b03979b",
-  "runtimeArtifactHash": "sha256:74f4cc03d494d7af5f9b29430d02fa9fc00e17250af53712b859066e5b349e8c",
+  "runtimeArtifactHash": "sha256:886a65ac2ddae0bc795c136b5996340329481c1f2b9eed1ffb0d17cdd4d04134",
   "compilerVersion": "0.1.0",
   "runtimeVersion": "0.1.0",
   "targetAdapterVersion": "dsh-workflow-ptc-adapter@0.1.0",
@@ -60,19 +60,19 @@
   ],
   "trials": [
     {
-      "runId": "20261025T025121Z-923bd9",
+      "runId": "20261025T033011Z-02e5bf",
       "inputHash": "sha256:f080eeb33e2d161a34e6d386aa9198bb3752f2793afb9e2ce8d12909a4ba0da6",
       "state": "COMPLETED",
       "businessStatus": "completed"
     },
     {
-      "runId": "20261025T025121Z-a23bc3",
+      "runId": "20261025T033011Z-42a9e0",
       "inputHash": "sha256:96f139aa08281d06498c323b0598a00ef9acc520aeb2c8099d43e6049b525e6a",
       "state": "COMPLETED",
       "businessStatus": "completed"
     },
     {
-      "runId": "20261025T025121Z-4b9f40",
+      "runId": "20261025T033011Z-d50505",
       "inputHash": "sha256:0c42c437e9c4a10bb1ab4ed1ce2cb8dc5932fbc0869de5d149e12d081ff7a910",
       "state": "COMPLETED",
       "businessStatus": "completed"
@@ -85,5 +85,5 @@
       "3 of 3 trial(s) ran against the offline mock engine; runtime_verified still requires a host trial"
     ]
   },
-  "builtAt": "2026-10-25T02:51:21.417Z"
+  "builtAt": "2026-10-25T03:30:11.116Z"
 }

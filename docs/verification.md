@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | 静态检查 | `pnpm typecheck` + 编译器单测 | 定义格式、引用、类型、资产、预算、脚本语法与自检 | ✅ 通过 |
 | 包装层与编译测试 | `pnpm test`（mock 引擎） | 分支、null、取消、期限、错误映射、文件状态、打包身份 | ✅ 114 个用例 |
+| 发布产物 | `pnpm verify:package [--from-registry]` | 干净项目安装、exports、工具与 Skill 注册、一次完整运行 | ✅ tarball 与 npm registry 均通过 |
 | 宿主集成 | 目标 DSH profile + Plugin Manager 安装 | exports、注入、spawn、PTC、生命周期、平台组合 | ⛔ 未执行 |
 | 业务试跑 | 真实模型 + 不同材料 | 内容质量、证据忠实度、复用价值、实际开销 | ⛔ 未执行 |
 
@@ -58,7 +59,7 @@ pnpm demo:failure
 
 ## 3. mock 能证明什么、不能证明什么
 
-**能证明**：控制流顺序、批次上限、位置对齐、null → 失败材料、assert 的拒绝路径、取消与 dispose 顺序、终态冻结、记录与报告写入、打包身份校验、bundle 的导出形状。
+**能证明**：控制流顺序、批次上限、位置对齐、null → 失败材料、assert 的拒绝路径、取消与 dispose 顺序、终态冻结、记录与报告写入、打包身份校验、bundle 的导出形状；以及**发布产物**能在没有工作区的干净项目里安装、注册 `source_brief` 工具与 `source-brief` Skill，并跑完一次带报告和记录的运行。
 
 **不能证明**：
 
@@ -72,8 +73,8 @@ pnpm demo:failure
 
 ## 4. 如何把状态推进到 installed / runtime_verified
 
-1. 在目标 DSH 版本（`0.2.1-rc.3` 基线）的 profile 上用 Plugin Manager 安装构建产物：
-   `examples/source-brief/packaged/<hash>/dsh-scenario-source-brief/`。
+1. 在目标 DSH 版本（`0.2.1-rc.3` 基线）的 profile 上安装已发布的包：
+   `dsh plugin add dsh-scenario-source-brief`（或指向 `packages/scenario-source-brief/`）。
 2. 插件配置必须提供宿主允许的绝对 `dataDir`；模型不得选择写入路径。
 3. 新会话调用 `source_brief`，确认 `state` 为 `COMPLETED`、`reportPath` 可读；调用 `forge_package` 之外的入口不再需要作者插件。
 4. 关闭作者插件再重复一次，记录 `installed`。
@@ -91,6 +92,9 @@ pnpm demo:failure
   - `forge_package` → `packaged`，`runtimeVerified: false`，notes 说明 mock；
   - 新数据目录 + 打包产物运行 → `COMPLETED`，`agentsStarted: 4`，报告含 3 个维度与来源片段。
 - `pnpm demo:failure`：三类失败的诊断文本（编译拒绝、运行期 `ASSERTION_FAILED`、打包 `TRIAL_REQUIRED` / `TRIAL_NOT_FOUND`）。
+- `pnpm verify:package`：把 tarball 装进空项目，`source_brief` 与 `source-brief` 注册成功，运行 `COMPLETED`，`report.md` 含维度与 `m1:1`，`run.json` 为 `COMPLETED` 且 `engineKind: "mock"`。
+- `pnpm verify:package --from-registry`：同一套断言，包来自 `registry.npmjs.org` 上的 `dsh-scenario-source-brief@0.1.0`。
+- npm：`dsh-scenario-source-brief@0.1.0` 已发布，`dist-tags.latest` 指向 0.1.0；`engines.dsh = 0.2.1-rc.3`，四个 `@deepseek-ai/*` 均为 peerDependencies。
 
 ## 6. 已知未覆盖
 
