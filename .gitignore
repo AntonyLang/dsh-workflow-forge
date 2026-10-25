@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.DS_Store
+
+# Plugin data directory (drafts, trials, runs, builds)
+.forge/
+
+# Generated demo output
+examples/source-brief/packaged/
+examples/source-brief/runs/
+
+# Scratch / source material not part of the deliverable
+01_*.docx
+_extract.md
+*.tmp
+*.log

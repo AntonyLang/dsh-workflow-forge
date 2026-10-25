@@ -1,0 +1,7 @@
+# Keep source bytes identical across platforms: implementation fingerprints
+# (runtimeArtifactHash / checksHash) hash file content, so CRLF drift must not
+# change a draft identity between machines.
+* text=auto eol=lf
+*.docx binary
+*.png binary
+*.jpg binary

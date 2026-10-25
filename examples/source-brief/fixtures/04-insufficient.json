@@ -1,0 +1,20 @@
+{
+  "topic": "两个方案的对比",
+  "materials": [
+    {
+      "id": "m1",
+      "title": "方案甲说明",
+      "sourceRef": "option-a",
+      "text": "方案甲采用托管服务，按调用量计费。\n前期投入低，但长期成本随用量线性增长。"
+    },
+    {
+      "id": "m2",
+      "title": "方案乙说明",
+      "sourceRef": "option-b",
+      "text": "方案乙需要自建集群，按节点计费。\n固定成本较高，用量增长后单位成本下降。"
+    }
+  ],
+  "dimensions": ["成本"],
+  "language": "zh",
+  "minSuccessful": 2
+}
