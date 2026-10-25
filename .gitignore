@@ -5,12 +5,17 @@ coverage/
 *.tsbuildinfo
 .DS_Store
 
+# The checked-in scenario package ships its built dist on purpose.
+!packages/scenario-source-brief/dist/
+!packages/scenario-source-brief/dist/**
+
 # Plugin data directory (drafts, trials, runs, builds)
 .forge/
 
-# Generated demo output
+# Generated demo output and release tarballs
 examples/source-brief/packaged/
 examples/source-brief/runs/
+release/
 
 # Scratch / source material not part of the deliverable
 01_*.docx

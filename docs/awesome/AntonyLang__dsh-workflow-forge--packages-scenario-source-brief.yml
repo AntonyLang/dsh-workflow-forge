@@ -1,0 +1,7 @@
+url: https://github.com/AntonyLang/dsh-workflow-forge/tree/main/packages/scenario-source-brief
+name: AntonyLang/dsh-workflow-forge#scenario-source-brief
+category: workflow
+description:
+  en: 'Turns a proven task into a checked scenario plugin: a restricted WorkflowSpec compiles to a native workflow script, and every report conclusion cites paragraph-level evidence.'
+  zh: '把一次跑通的任务固化成可检查的场景插件：受限 WorkflowSpec 编译为原生 workflow 脚本，报告结论引用段落级证据。'
+tarball: https://github.com/AntonyLang/dsh-workflow-forge/releases/download/v0.1.0/dsh-scenario-source-brief-0.1.0.tgz

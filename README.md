@@ -77,9 +77,25 @@ pnpm typecheck       # 全仓 TypeScript 严格模式
 pnpm test            # 114 个用例：编译负例、证据检查、取消/超时、打包、端到端
 pnpm demo            # 离线全链路：validate → trial×5 → package → 新会话运行
 pnpm demo:failure    # 三个层次的失败与对应诊断
+pnpm build:scenario  # 生成可直接安装的包：packages/scenario-source-brief/
+pnpm pack:scenario   # 生成发布用的 tarball：release/dsh-scenario-source-brief-0.1.0.tgz
 ```
 
 `pnpm demo` 不需要模型和 API Key：它用一个**离线 mock 引擎**执行真实编译产物，覆盖真实的分批、空结果、分支和报告渲染。这也是为什么它的运行记录会写 `engineKind: "mock"`，构建只会标成 `packaged`。
+
+## 安装这个场景
+
+`pnpm build:scenario` 产出的 `packages/scenario-source-brief/` 是一个完整、可直接安装的 DSH 插件包（声明了 `dsh.bundle` 与 `cordis.patch.yml`，并内置 `dist/index.js`）：
+
+```bash
+dsh plugin add ./packages/scenario-source-brief
+# 或在发布到 npm 之后：
+# dsh plugin add dsh-scenario-source-brief
+```
+
+安装后必须配置 `dataDir`（宿主允许的绝对目录）：运行输入、报告与记录都写在这里，模型不能选择写入路径。
+
+> npm 包名已预留为 `dsh-scenario-source-brief`。当前仓库状态见 `docs/awesome/README.md`：真实宿主安装（`installed`）与真实模型试跑（`runtime_verified`）尚未执行，因此构建仍停在 `packaged`。
 
 ## 三个层次的验证状态
 
@@ -103,8 +119,9 @@ packages/
   author/     作者插件：Skill + forge_validate / forge_trial / forge_package / forge_inspect
 examples/
   source-brief/   首个场景：Spec、5 份脱敏 fixtures、SKILL.md
+packages/scenario-source-brief/   已构建、可直接安装/发布 `dsh-scenario-source-brief`
 tests/             114 个用例，11 个文件
-docs/              架构、DSL、数据合同、验证矩阵、作品集博客
+docs/              架构、DSL、数据合同、验证矩阵、作品集博客、awesome 投稿材料
 ```
 
 ## 设计要点（详见 `docs/architecture.md`）

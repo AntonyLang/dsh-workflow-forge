@@ -1,5 +1,6 @@
 packages:
   - "packages/*"
+  - "!packages/scenario-source-brief"
 
 onlyBuiltDependencies:
   - esbuild

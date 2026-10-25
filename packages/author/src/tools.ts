@@ -43,6 +43,8 @@ export type AuthorProfile = {
   licenseText?: string;
   dshVersion?: string;
   examples?: Array<{ path: string; content: string }>;
+  /** Exact directory for a checked-in, publishable package. */
+  targetDir?: string;
 };
 
 export type AuthorConfig = {
@@ -336,6 +338,7 @@ export function createAuthorTools(config: AuthorConfig): AuthorApi {
         ...(profile.licenseText ? { licenseText: profile.licenseText } : {}),
         ...(profile.dshVersion ? { dshVersion: profile.dshVersion } : {}),
         ...(profile.examples ? { examples: profile.examples } : {}),
+        ...(profile.targetDir ? { targetDir: profile.targetDir } : {}),
         now,
       });
 

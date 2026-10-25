@@ -7,7 +7,7 @@
  * remain explicit host operations whose result is recorded as verification state.
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import {
   DIAGNOSTIC_CODES,
   diagnostic,
@@ -59,6 +59,12 @@ export type PackageRequest = {
   trials: TrialRecord[];
   /** Parent directory; the build is written to <outputDir>/<buildHash>/<packageName>/. */
   outputDir: string;
+  /**
+   * Exact output directory for a checked-in, publishable package. When set, the
+   * versioned directory layout is skipped; immutability comes from git history and
+   * the hashes recorded in assets/build.json instead.
+   */
+  targetDir?: string;
   packageName?: string;
   dshVersion?: string;
   licenseText?: string;
@@ -115,13 +121,36 @@ const DEFAULT_README = (manifest: BuildManifest, packageName: string, buildHash:
 
 DSH 场景插件：${manifest.workflowId}@${manifest.workflowVersion}
 
-把已读取的文本材料抽取为可定位证据，再按指定维度生成带 \`evidenceId\` 引用的结构化报告（JSON + Markdown）。
+把已读取的文本材料抽取为可定位证据，再按指定维度生成带 \`evidenceId\` 引用的结构化报告（JSON + Markdown）。报告由固定模板渲染，用户材料只作为数据进入。
+
+## 一次调用
+
+输入：
+
+\`\`\`json
+{
+  "topic": "三款笔记应用的取舍",
+  "materials": [{ "id": "m1", "title": "访谈记录", "text": "第一段……\\n第二段……" }],
+  "dimensions": ["同步与离线", "检索与整理"],
+  "language": "zh",
+  "minSuccessful": 1
+}
+\`\`\`
+
+输出（canonical JSON）：\`runId\`、\`state\`、\`businessStatus\`、\`checks\`、\`reportPath\`、\`resultPath\`、\`error\`。
+
+## 安装
+
+1. 从 npm 安装：\`dsh plugin add ${packageName}\`；
+   离线或尚未发布时，用目标 DSH 版本的 Plugin Manager 指向本目录（或仓库中该子目录）。
+2. **配置 \`dataDir\`**：必须是宿主允许的绝对目录。运行输入、报告与记录都写在这里；模型不能选择写入路径。
+3. 在**新会话**中调用工具 \`${manifest.workflowId.replace(/-/g, "_")}\`。
 
 ## 内容
 
 | 路径 | 作用 |
 | --- | --- |
-| \`dist/index.js\` | 场景工具、Skill 注册、薄 runtime 与校验器（ESM bundle） |
+| \`dist/index.js\` | 场景工具、Skill 注册、薄 runtime 与校验器（ESM bundle，无 \`@deepseek-ai/*\` import） |
 | \`assets/workflow.js\` | 固定脚本，原生 workflow 引擎实际执行的字节 |
 | \`assets/workflow.json\` | 固定 WorkflowSpec，供解释与复核 |
 | \`assets/build.json\` | 版本、hash、依赖与验证摘要 |
@@ -130,17 +159,20 @@ DSH 场景插件：${manifest.workflowId}@${manifest.workflowVersion}
 | \`examples\` | 脱敏输入与失败案例说明 |
 | \`cordis.patch.yml\` | 宿主 bundle 的 insert 入口 |
 
-## 安装
+## 结果处理
 
-1. 用目标 DSH 版本的 Plugin Manager 安装本目录（或打包后的 tarball）。
-2. 在插件配置中提供 \`dataDir\`：必须是宿主允许的绝对目录，运行输入、报告与记录都写在这里。
-3. 在**新会话**中调用工具 \`${manifest.workflowId.replace(/-/g, "_")}\`。
+| state | 该做什么 |
+| --- | --- |
+| \`COMPLETED\` | 用 \`reportPath\` 的内容作为回答主体，并说明"未覆盖材料"一节 |
+| \`INSUFFICIENT_INPUT\` | 不要伪造报告；说明失败材料与下一步，或询问是否降低 \`minSuccessful\` |
+| \`FAILED\` | 按 \`error.code\` 解释；\`ASSERTION_FAILED\` 表示引用/维度检查没通过 |
+| \`CANCELLED\` / \`UNKNOWN\` | 说明取消来源或查看 runId 记录；重跑一定是新 runId |
 
 ## 兼容性
 
 | 项 | 值 |
 | --- | --- |
-| \`engines.dsh\` | \`${manifest.runtimeVersion === "0.1.0" ? "0.2.1-rc.3" : "0.2.1-rc.3"}\` |
+| \`engines.dsh\` | \`0.2.1-rc.3\`（方案源码基线提交 \`22ddee3\`） |
 | target adapter | \`${manifest.targetAdapterVersion}\` |
 | compiler | \`${manifest.compilerVersion}\` |
 | runtime | \`${manifest.runtimeVersion}\` |
@@ -155,11 +187,13 @@ ${manifest.verification.runtimeVerified ? "" : "\n> 本构建的试跑来自离�
 
 安装不等于业务可用：安装证明 \`exports\`、依赖与 profile 配置正确，业务试跑才证明模型结构化输出与文件策略能一起工作。
 
-## 不包含
+## 边界
 
-- 不包含作者插件或编译器，运行期不解释 WorkflowSpec；
-- 不包含任何模型密钥、用户材料或运行记录；
-- 不包含空 UI 包；\`dsh.client\` 仅在确实提供客户端组件时才会加入。
+- 只处理已读取的文本；不读文件、不联网、不负责把 URL 变成文本。
+- 不提供跨重启恢复；\`run.json\` 是诊断记录，不是断点。
+- 结构化检查只证明 quote 可定位、evidenceId 存在、维度齐全，**不证明事实判断正确**。
+- 不包含作者插件或编译器，运行期不解释 WorkflowSpec。
+- 不包含任何模型密钥、用户材料或运行记录。
 
 ## License
 
@@ -334,9 +368,9 @@ export async function packageScenario(request: PackageRequest): Promise<PackageR
     builtAt,
   };
 
-  // 4. Write the versioned package directory.
+  // 4. Write the versioned package directory (or the exact publish directory).
   const versionDir = join(request.outputDir, buildHash.replace(/^sha256:/, "").slice(0, 16));
-  const packageDir = join(versionDir, packageName);
+  const packageDir = request.targetDir ? resolve(request.targetDir) : join(versionDir, packageName);
   const files: string[] = [];
   const write = (relative: string, content: string): void => {
     const target = join(packageDir, relative);
@@ -357,6 +391,10 @@ export async function packageScenario(request: PackageRequest): Promise<PackageR
         type: "module",
         private: false,
         description: draft.spec.description ?? `DSH scenario ${draft.spec.workflowId}`,
+        author: "AntonyLang",
+        homepage: "https://github.com/AntonyLang/dsh-workflow-forge",
+        bugs: { url: "https://github.com/AntonyLang/dsh-workflow-forge/issues" },
+        keywords: ["dsh", "dsh-plugin", "scenario", "workflow", "report", "evidence"],
         exports: {
           ".": "./dist/index.js",
           "./package.json": "./package.json",
@@ -371,7 +409,16 @@ export async function packageScenario(request: PackageRequest): Promise<PackageR
           "@deepseek-ai/dsh-skill": "0.2.1-rc.3",
         },
         dsh: { bundle: { patch: "./cordis.patch.yml" } },
-        ...(request.repository ? { repository: request.repository } : {}),
+        ...(request.repository
+          ? { repository: { type: "git", url: request.repository, directory: `packages/${packageName}` } }
+          : {
+              repository: {
+                type: "git",
+                url: "https://github.com/AntonyLang/dsh-workflow-forge.git",
+                directory: `packages/${packageName}`,
+              },
+            }),
+        publishConfig: { access: "public" },
         license: "MIT",
       },
       null,

@@ -1,0 +1,89 @@
+{
+  "manifestVersion": "0.1",
+  "workflowId": "source-brief",
+  "workflowVersion": "0.1.0",
+  "specVersion": "0.1",
+  "specHash": "sha256:09562031c1dfb55641919b66624f77a3d5b821ad6068898104a4b5bcd602555b",
+  "draftHash": "sha256:52f652d0c588f89d143f5d084abf13bdaf3fcf2e42d423905379747b2e75e8ce",
+  "scriptHash": "sha256:0227ab9faf3321495f852096907c43381ca36636beae1134032ffa5f32fc7b89",
+  "assetsHash": "sha256:c3d1529ebd25eaf745eb6dcadf576eab0c98b4825e7f00f2e1cdf181b768e44c",
+  "checksHash": "sha256:2b10bca11c8f8ecd37e8bb1f4e71dc7769c1c6a2d1dd4eb3e537dcfd4b03979b",
+  "runtimeArtifactHash": "sha256:74f4cc03d494d7af5f9b29430d02fa9fc00e17250af53712b859066e5b349e8c",
+  "compilerVersion": "0.1.0",
+  "runtimeVersion": "0.1.0",
+  "targetAdapterVersion": "dsh-workflow-ptc-adapter@0.1.0",
+  "limits": {
+    "maxMaterials": 4,
+    "mapConcurrency": 2,
+    "maxDirectAgents": 5
+  },
+  "worstCaseAgents": 5,
+  "agents": [
+    {
+      "id": "extract",
+      "kind": "agent_map",
+      "schemaKey": "EvidenceExtract"
+    },
+    {
+      "id": "synthesize",
+      "kind": "agent",
+      "schemaKey": "Brief"
+    }
+  ],
+  "prompts": [
+    {
+      "kind": "prompt",
+      "key": "extract",
+      "fileName": "extract.md",
+      "hash": "sha256:e5fd41222b9d2eb93c3a9399d06e6ab2b2fe73fca0605fd0e50c2e20c9c28ccf"
+    },
+    {
+      "kind": "prompt",
+      "key": "synthesize",
+      "fileName": "synthesize.md",
+      "hash": "sha256:ef9b4434727604a184694b2e7f7a2d3cdcc8fe08a9f0689e146e9e584e160043"
+    }
+  ],
+  "schemas": [
+    {
+      "kind": "schema",
+      "key": "EvidenceExtract",
+      "fileName": "EvidenceExtract.json",
+      "hash": "sha256:80dadfef844e973febe57bd3d7794cc106db0c9336949fe2900377c83797354a"
+    },
+    {
+      "kind": "schema",
+      "key": "Brief",
+      "fileName": "Brief.json",
+      "hash": "sha256:32211da7587cb9cb2f9f9009b48c21fd6aa587688a08e5cda39cc0dd4eaafd91"
+    }
+  ],
+  "trials": [
+    {
+      "runId": "20261025T025121Z-923bd9",
+      "inputHash": "sha256:f080eeb33e2d161a34e6d386aa9198bb3752f2793afb9e2ce8d12909a4ba0da6",
+      "state": "COMPLETED",
+      "businessStatus": "completed"
+    },
+    {
+      "runId": "20261025T025121Z-a23bc3",
+      "inputHash": "sha256:96f139aa08281d06498c323b0598a00ef9acc520aeb2c8099d43e6049b525e6a",
+      "state": "COMPLETED",
+      "businessStatus": "completed"
+    },
+    {
+      "runId": "20261025T025121Z-4b9f40",
+      "inputHash": "sha256:0c42c437e9c4a10bb1ab4ed1ce2cb8dc5932fbc0869de5d149e12d081ff7a910",
+      "state": "COMPLETED",
+      "businessStatus": "completed"
+    }
+  ],
+  "verification": {
+    "state": "packaged",
+    "runtimeVerified": false,
+    "notes": [
+      "3 of 3 trial(s) ran against the offline mock engine; runtime_verified still requires a host trial"
+    ]
+  },
+  "builtAt": "2026-10-25T02:51:21.417Z"
+}

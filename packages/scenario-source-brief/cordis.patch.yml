@@ -1,0 +1,6 @@
+# Bundle patch for dsh-scenario-source-brief.
+# The id is local to the profile; the package name is resolved by the host.
+- insert:
+    - id: scenario-source-brief
+      name: dsh-scenario-source-brief
+      config: {}

@@ -1,0 +1,58 @@
+{
+  "name": "dsh-scenario-source-brief",
+  "version": "0.1.0",
+  "type": "module",
+  "private": false,
+  "description": "从一组已读取的文本材料中抽取可定位证据，按指定维度生成带证据引用的结构化报告。",
+  "author": "AntonyLang",
+  "homepage": "https://github.com/AntonyLang/dsh-workflow-forge",
+  "bugs": {
+    "url": "https://github.com/AntonyLang/dsh-workflow-forge/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "scenario",
+    "workflow",
+    "report",
+    "evidence"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "dist/",
+    "assets/",
+    "skills/",
+    "examples/",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "dsh": "0.2.1-rc.3",
+    "node": ">=22.11"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.3",
+    "@deepseek-ai/dsh-workflow": "0.2.1-rc.3",
+    "@deepseek-ai/dsh-skill": "0.2.1-rc.3"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AntonyLang/dsh-workflow-forge.git",
+    "directory": "packages/dsh-scenario-source-brief"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}
