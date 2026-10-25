@@ -86,7 +86,7 @@ pnpm verify:package  # 从 tarball 安装到干净项目并跑通；加 --from-r
 
 ## 安装这个场景
 
-已发布到 npm：**`dsh-scenario-source-brief@0.1.0`**
+已发布到 npm：**[`dsh-scenario-source-brief@0.1.0`](https://www.npmjs.com/package/dsh-scenario-source-brief)**
 
 ```bash
 dsh plugin add dsh-scenario-source-brief
